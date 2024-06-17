@@ -91,7 +91,7 @@ class DouYinVideo(object):
         if self.local_executable_path:
             browser = await playwright.chromium.launch(headless=False, executable_path=self.local_executable_path)
         else:
-            browser = await playwright.chromium.launch(headless=False)
+            browser = await playwright.chromium.launch(headless=True)
         # 创建一个浏览器上下文，使用指定的 cookie 文件
         context = await browser.new_context(storage_state=f"{self.account_file}")
         context = await set_init_script(context)
@@ -160,15 +160,18 @@ class DouYinVideo(object):
                 await asyncio.sleep(2)
 
         # 更换可见元素
-        await page.locator('div.semi-select span:has-text("输入地理位置")').click()
-        await page.keyboard.press("Backspace")
-        await page.wait_for_timeout(2000)
-        # await page.keyboard.press("Control+KeyA")
-        # await page.keyboard.press("Delete")
-        await page.keyboard.type("杭州市")
-        # await asyncio.sleep(1)
-        await page.wait_for_timeout(1000)
-        await page.locator('div[role="listbox"] [role="option"]').first.click()
+        # await page.locator('div.semi-select span:has-text("输入地理位置")').click()
+        # await page.keyboard.press("Backspace")
+        # await page.wait_for_timeout(2000)
+        # # await page.keyboard.press("Control+KeyA")
+        # # await page.keyboard.press("Delete")
+        # await page.keyboard.type("杭州市")
+        # # await asyncio.sleep(1)
+        # await page.wait_for_timeout(1000)
+        # await page.locator('div[role="listbox"] [role="option"]').first.click()
+
+        await page.locator('div.semi-select span:has-text("请选择合集")').click()
+        await page.locator('div[role="listbox"] [role="option"]').nth(2).click()
 
         # 頭條/西瓜
         third_part_element = '[class^="info"] > [class^="first-part"] div div.semi-switch'
