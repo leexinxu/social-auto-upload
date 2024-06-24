@@ -89,7 +89,7 @@ class TencentVideo(object):
         self.publish_date = publish_date
         self.account_file = account_file
         self.category = category
-        self.local_executable_path = LOCAL_CHROME_PATH
+        self.local_executable_path = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 
     async def set_schedule_time_tencent(self, page, publish_date):
         label_element = page.locator("label").filter(has_text="定时").nth(1)
@@ -234,7 +234,7 @@ class TencentVideo(object):
     async def add_collection(self, page):
         collection_elements = page.get_by_text("添加到合集").locator("xpath=following-sibling::div").locator(
             '.option-list-wrap > div')
-        if await collection_elements.count() > 1:
+        if await collection_elements.count() > 0:
             await page.get_by_text("添加到合集").locator("xpath=following-sibling::div").click()
             await collection_elements.first.click()
 
