@@ -8,6 +8,8 @@ import asyncio
 from pathlib import Path
 from tencent_uploader.main import weixin_setup, TencentVideo
 from utils.constant import TencentZoneTypes
+from playwright.async_api import Playwright, async_playwright
+from utils.base_social_media import set_init_script
 
 # %%
 def log(message):
@@ -68,6 +70,48 @@ def upload(filepath, account_file):
     asyncio.run(app.main(), debug=False)
 
 # %%
+# 更新cookie
+async def update_cookie_playwright(account_file):
+    async with async_playwright() as playwright:
+        # 使用 Chromium (这里使用系统内浏览器，用chromium 会造成h264错误
+        browser = await playwright.chromium.launch(headless=False, executable_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
+        # 创建一个浏览器上下文，使用指定的 cookie 文件
+        context = await browser.new_context(storage_state=f"{account_file}")
+        context = await set_init_script(context)
+
+        # 创建一个新的页面
+        page = await context.new_page()
+        # 访问指定的 URL
+        await page.goto("https://channels.weixin.qq.com/platform/post/create")
+        # 等待页面跳转到指定的 URL，没进入，则自动等待到超时
+        await page.wait_for_url("https://channels.weixin.qq.com/platform/post/create")
+        await context.storage_state(path=f"{account_file}")  # 保存cookie
+        log('cookie更新完毕！')
+        # 关闭浏览器上下文和浏览器实例
+        await context.close()
+        await browser.close()
+
+
+# %%
+# 更新cookie
+def update_cookie(account_file = Path(Path(__file__).parent.resolve() / "tencent_uploader" / "account.json")):
+    # 获取文件的最后修改时间
+    last_modified_time = os.path.getmtime(account_file)
+    # 获取当前时间
+    current_time = time.time()
+    # 计算时间差
+    time_difference = current_time - last_modified_time
+    # 判断时间差是否超过一个小时
+    if time_difference > 3600:
+        # 更新cookie
+        log("Updating cookie...")
+        asyncio.run(update_cookie_playwright(account_file), debug=False)
+        return True
+    else:
+        log("No need to update cookie")
+        return False
+
+# %%
 # 每分钟检查一下是否有需要上传的视频，如果有，则上传
 def check_up(src_dir, dst_dir, account_file):
     log("******* Start Auto Video Tencent Upload *******")
@@ -76,16 +120,22 @@ def check_up(src_dir, dst_dir, account_file):
         # 获取目录中两级的【中配】*.mp4文件
         mp4_files = find_chinese_subbed_videos(src_dir)
         log(f"Get new videos : {len(mp4_files)}")
-        for mp4_file in mp4_files:
-            # 上传视频
-            upload(mp4_file, account_file)
-            
-            # 上传完移动文件夹到TranslationCompletedUploadBilibiliMove
-            move_folder(os.path.dirname(mp4_file), dst_dir)
 
-            # 防止提交过快
-            log("Waiting for 60 seconds before next upload...")
-            time.sleep(60)
+        if len(mp4_files) > 0:
+            # 上传视频
+            for mp4_file in mp4_files:
+                # 上传视频
+                upload(mp4_file, account_file)
+                
+                # 上传完移动文件夹到TranslationCompletedUploadBilibiliMove
+                move_folder(os.path.dirname(mp4_file), dst_dir)
+
+                # 防止提交过快
+                log("Waiting for 60 seconds before next upload...")
+                time.sleep(60)
+        else:
+            # 更新cookie
+            update_cookie(account_file)
 
         # 等待 60 秒再检查
         log("Waiting for 60 seconds before next check...")
