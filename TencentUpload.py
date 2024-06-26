@@ -83,8 +83,8 @@ async def update_cookie_playwright(account_file):
         page = await context.new_page()
         # 访问指定的 URL
         await page.goto("https://channels.weixin.qq.com/platform/post/create")
-        # 等待页面跳转到指定的 URL，没进入，则自动等待到超时
-        await page.wait_for_url("https://channels.weixin.qq.com/platform/post/create")
+        # 等待页面完全加载完成
+        await page.wait_for_load_state("networkidle")  # "load"、"domcontentloaded" 或 "networkidle" 都可以选择
         await context.storage_state(path=f"{account_file}")  # 保存cookie
         log('cookie更新完毕！')
         # 关闭浏览器上下文和浏览器实例
