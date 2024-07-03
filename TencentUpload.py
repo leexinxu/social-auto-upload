@@ -133,9 +133,9 @@ def check_up(src_dir, dst_dir, account_file):
                 # 防止提交过快
                 log("Waiting for 60 seconds before next upload...")
                 time.sleep(60)
-        else:
+        #else:
             # 更新cookie
-            update_cookie(account_file)
+            #update_cookie(account_file)
 
         # 等待 60 秒再检查
         log("Waiting for 60 seconds before next check...")

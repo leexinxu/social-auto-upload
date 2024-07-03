@@ -168,3 +168,4 @@ douyin_uploader/*.json
 bilibili_uploader/*.json
 tk_uploader/*.json
 cookies
+xhs_uploader/accounts.ini
