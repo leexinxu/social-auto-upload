@@ -129,7 +129,7 @@ def check_up(src_dir, dst_dir):
 
 # %%
 # 启动自动上传
-src_dir = '/Volumes/Data/VideoTranslation/TranslationCompletedUploadTencentMove'
+src_dir = '/Volumes/Data/VideoTranslation/TranslationCompletedUploadDouyinMove'
 dst_dir = '/Volumes/Data/VideoTranslation/TranslationCompletedUploadXHSMove'
 check_up(src_dir, dst_dir)
 

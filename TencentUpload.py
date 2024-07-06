@@ -145,7 +145,7 @@ def check_up(src_dir, dst_dir, account_file):
 # 启动自动上传
 BASE_DIR = Path(__file__).parent.resolve()
 account_file = Path(BASE_DIR / "tencent_uploader" / "account.json")
-src_dir = '/Volumes/Data/VideoTranslation/TranslationCompletedUploadDouyinMove'
+src_dir = '/Volumes/Data/VideoTranslation/TranslationCompletedUploadXHSMove'
 dst_dir = '/Volumes/Data/VideoTranslation/TranslationCompletedUploadTencentMove'
 check_up(src_dir, dst_dir, account_file)
 
