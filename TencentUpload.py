@@ -66,7 +66,7 @@ def upload(filepath, account_file):
     print(f"视频文件名：{filepath}")
     print(f"标题：{title}")
     print(f"Hashtag：{tags}")
-    app = TencentVideo(title, filepath, tags, 0, account_file, category)
+    app = TencentVideo(title, filepath, tags, 0, account_file, category=None)
     asyncio.run(app.main(), debug=False)
 
 # %%
