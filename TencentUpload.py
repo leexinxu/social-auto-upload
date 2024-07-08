@@ -60,7 +60,7 @@ def upload(filepath, account_file):
     # 标题使用 文件名, 文件名示例：【中配】人工智能【AI】
     title = os.path.splitext(os.path.basename(filepath))[0]
     tags = ['破浪', '科技', '未来', 'AI', 'AGI']
-    category = TencentZoneTypes.LIFESTYLE.value  # 标记原创需要否则不需要传
+    category = TencentZoneTypes.TECHNOLOGY.value  # 标记原创需要否则不需要传
 
     # 打印视频文件名、标题和 hashtag
     print(f"视频文件名：{filepath}")
