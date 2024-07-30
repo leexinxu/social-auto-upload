@@ -165,7 +165,7 @@ class DouYinVideo(object):
         await page.wait_for_timeout(2000)
         # await page.keyboard.press("Control+KeyA")
         # await page.keyboard.press("Delete")
-        await page.keyboard.type("杭州市")
+        await page.keyboard.type("")
         # await asyncio.sleep(1)
         await page.wait_for_timeout(1000)
         await page.locator('div[role="listbox"] [role="option"]').first.click()
