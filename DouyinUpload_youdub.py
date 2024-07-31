@@ -46,6 +46,8 @@ def upload(folder, account_file):
 
     title = f'【中配】{summary["title"]}【{title_English}】'
 
+    title = f'{title}\n\n {description}'
+
     # 去除空格并获取前5个标签
     tags = [tag.replace(" ", "") for tag in tags][:5]
 
@@ -76,9 +78,8 @@ def check_up(src_dir, account_file):
             log("防止提交过快，等待1分钟上传下一个。。。")
             time.sleep(60)
 
-        # 等待 60 秒再检查
-        log("等待60秒再检查。。。")
-        time.sleep(60)
+        log("等待10分钟再检查。。。")
+        time.sleep(60*10)
 
 # %%
 # 启动自动上传

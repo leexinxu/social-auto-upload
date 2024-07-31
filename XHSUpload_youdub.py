@@ -42,7 +42,7 @@ def upload(folder, xhs_client):
         data = json.load(f)
     title_English = data['title']
     webpage_url = data['webpage_url']
-    description = f'{summary["summary"]}\n\n{summary["author"]}\n\n{webpage_url}'
+    description = f'{summary["summary"]}\n\n{summary["author"]}'
 
     title = f'【中配】{summary["title"]}【{title_English}】'
 
