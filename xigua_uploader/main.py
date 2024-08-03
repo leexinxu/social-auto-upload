@@ -141,15 +141,16 @@ class XiGuaVideo(object):
 
         # 使用更具体的选择器定位输入框
         tag_input = page.locator('input[placeholder="输入合适的话题"]')
-        # 确保输入框获取焦点
-        await tag_input.click()
-        # 遍历话题标签，并依次输入
-        for index, tag in enumerate(self.tags[:10], start=1):
-            await page.keyboard.type(f"#{tag}")  # 输入话题
-            await page.wait_for_timeout(1000)  # 等待 1000 毫秒以确保输入稳定
-            await page.keyboard.press("Enter")  # 按下 Enter 键以添加话题
+        if await tag_input.count() > 0:
+            # 确保输入框获取焦点
+            await tag_input.click()
+            # 遍历话题标签，并依次输入
+            for index, tag in enumerate(self.tags[:10], start=1):
+                await page.keyboard.type(f"#{tag}")  # 输入话题
+                await page.wait_for_timeout(1000)  # 等待 1000 毫秒以确保输入稳定
+                await page.keyboard.press("Enter")  # 按下 Enter 键以添加话题
 
-        xigua_logger.info(f'总共添加{len(self.tags)}个话题')
+            xigua_logger.info(f'总共添加{len(self.tags)}个话题')
 
         while True:
             # 判断是否显示“上传成功”的状态，若无则继续等待
@@ -184,14 +185,16 @@ class XiGuaVideo(object):
         local_upload_button = page.locator('li:has-text("本地上传")')
         await local_upload_button.click()
         # 等待文件上传输入框出现
-        file_input = page.locator('input[type="file"]')
+        file_input = page.locator("input[type='file'][accept='image/jpg,image/jpeg,image/png,image/x-png,image/webp']")
         # 使用 file_input.set_files 方法上传封面图片
         await file_input.set_input_files(self.cover)
         # 等待“完成裁剪”按钮出现并点击
         await page.wait_for_timeout(1000)  # 等待 1000 毫秒以确保输入稳定
         complete_crop_button = page.locator('div.clip-btn-content:has-text("完成裁剪")')
+        # 禁用的“确定”按钮
+        confirm_button_disabled = page.locator('button.btn-l.btn-sure.ml16.disabled:has-text("确定")')
         # 检查“完成裁剪”按钮是否存在
-        if await complete_crop_button.count() > 0:
+        if await complete_crop_button.count() > 0 and await confirm_button_disabled.count() > 0:
             # 如果存在，点击“完成裁剪”按钮
             await complete_crop_button.click()
         # 等待“确定”按钮出现并点击
@@ -205,33 +208,34 @@ class XiGuaVideo(object):
 
         # 定位包含“原创”文本的 label 元素
         original_option = page.locator('label.byte-radio:has-text("原创")')
-        # 点击选项以选择“原创”
-        await original_option.click()
+        if await original_option.count() > 0:
+            # 点击选项以选择“原创”
+            await original_option.click()
 
         # 输入简介
         # 定位内容可编辑区域
+        summary = page.locator('div.public-DraftEditorPlaceholder-inner:has-text("请填写视频简介")')
         editors = page.locator('div.public-DraftEditor-content')
         # 确保找到的元素只有一个或选择第一个
-        if await editors.count() > 0:
+        if await editors.count() > 0 and await summary.count() > 0:
             editor = editors.nth(1)  # 使用 nth 方法选择第二个元素 20240803
-        else:
-            raise Exception("找不到可编辑区域")
-        # 清空内容编辑区域中的现有内容
-        await editor.click()
-        await page.keyboard.press("Control+A")  # 选择所有文本
-        await page.keyboard.press("Backspace")  # 删除所有文本
-        # 输入新的内容
-        await editor.type(self.summary[:400])
+            # 清空内容编辑区域中的现有内容
+            await editor.click()
+            await page.keyboard.press("Control+A")  # 选择所有文本
+            await page.keyboard.press("Backspace")  # 删除所有文本
+            # 输入新的内容
+            await editor.type(self.summary[:400])
 
         # 定位“添加至合集”按钮并点击
         add_to_collection_button = page.locator('div.add-button:has-text("添加至合集")')
-        await add_to_collection_button.click()
-        # 定位并点击“中文配音”项
-        series_item = page.locator('div.m-item-title:has-text("【中文配音】")')
-        await series_item.click()
-        # 定位并点击确认按钮
-        confirm_button = page.locator('button:has-text("确认")')  # 根据实际按钮文本或其他属性调整选择器
-        await confirm_button.click()
+        if await add_to_collection_button.count() > 0:
+            await add_to_collection_button.click()
+            # 定位并点击“中文配音”项
+            series_item = page.locator('div.m-item-title:has-text("【中文配音】")')
+            await series_item.click()
+            # 定位并点击确认按钮
+            confirm_button = page.locator('button:has-text("确认")')  # 根据实际按钮文本或其他属性调整选择器
+            await confirm_button.click()
 
         # 判断视频是否发布成功
         while True:

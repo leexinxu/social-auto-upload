@@ -13,11 +13,29 @@ def log(message):
     print(f"{current_time} - {message}")
 
 # %%
+def is_landscape(info_path):
+    """检查视频信息中是否为横版视频（即宽度大于高度）。"""
+    try:
+        with open(info_path, 'r', encoding='utf-8') as f:
+            info = json.load(f)
+            width = info.get('width')
+            height = info.get('height')
+            # 检查宽高是否存在且宽度大于高度
+            if width and height:
+                return width > height
+    except (FileNotFoundError, json.JSONDecodeError):
+        return False  # 如果文件不存在或解析错误，则视为不是横版
+    return False
+
+# %%
 def find_videos(folder):
     dir_list = []
     for dir, _, files in os.walk(folder):
-        if 'ok.json' in files and 'video.mp4' in files and 'douyin.json' not in files:
-            dir_list.append(dir)
+        if 'ok.json' in files and 'video.mp4' in files and 'douyin.json' not in files and 'download.info.json' in files:
+            info_path = os.path.join(dir, 'download.info.json')
+            if not is_landscape(info_path):  # 使用 JSON 文件检查是否为横版
+                # 只上传非横版，竖版，横版西瓜视频传
+                dir_list.append(dir)
     return dir_list
 
 # %%

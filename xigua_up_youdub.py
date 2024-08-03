@@ -13,11 +13,28 @@ def log(message):
     print(f"{current_time} - {message}")
 
 # %%
+def is_landscape(info_path):
+    """检查视频信息中是否为横版视频（即宽度大于高度）。"""
+    try:
+        with open(info_path, 'r', encoding='utf-8') as f:
+            info = json.load(f)
+            width = info.get('width')
+            height = info.get('height')
+            # 检查宽高是否存在且宽度大于高度
+            if width and height:
+                return width > height
+    except (FileNotFoundError, json.JSONDecodeError):
+        return False  # 如果文件不存在或解析错误，则视为不是横版
+    return False
+
+# %%
 def find_videos(folder):
     dir_list = []
     for dir, _, files in os.walk(folder):
-        if 'ok.json' in files and 'video.mp4' in files and 'douyin.json' not in files:
-            dir_list.append(dir)
+        if 'ok.json' in files and 'video.mp4' in files and 'douyin.json' not in files and 'download.info.json' in files:
+            info_path = os.path.join(dir, 'download.info.json')
+            if is_landscape(info_path):  # 使用 JSON 文件检查是否为横版
+                dir_list.append(dir)
     return dir_list
 
 # %%
@@ -45,13 +62,15 @@ def upload(folder, account_file):
         data = json.load(f)
     title_English = data['title']
     webpage_url = data['webpage_url']
-    description = f'{summary["summary"]}\n\n{summary["author"]}\n\n{webpage_url}'
+    description = f'{summary["summary"]}\n\n{summary["author"]}'
 
     title = f'【中配】{summary["title"]}【{title_English}】'
 
     # 如果标题大于30个字符会被截断，把标题也放简介里
     if len(title) > 30:
         description = f'{title}\n\n{description}'
+        # 标题去掉英文标题，截取到最后一个 '【' 之前的内容
+        title = title[:title.rfind('【')].strip()
 
     # 去除空格并获取前10个标签
     tags = [tag.replace(" ", "") for tag in tags][:10]
