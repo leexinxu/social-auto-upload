@@ -69,8 +69,13 @@ def upload(folder, account_file):
     # 如果标题大于30个字符会被截断，把标题也放简介里
     if len(title) > 30:
         description = f'{title}\n\n{description}'
-        # 标题去掉英文标题，截取到最后一个 '【' 之前的内容
-        title = title[:title.rfind('【')].strip()
+        # 标题去掉英文标题，截取到最后一个 '【' 之前的内容，去掉小于5就不去了
+        if len(title[:title.rfind('【')].strip()) >= 5:
+            title = title[:title.rfind('【')].strip()
+
+    # 标题小于5个字符
+    if len(title) < 5:
+        title = "【中配】破浪"
 
     # 去除空格并获取前10个标签
     tags = [tag.replace(" ", "") for tag in tags][:10]

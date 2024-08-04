@@ -124,6 +124,8 @@ class XiGuaVideo(object):
         # 填充标题和话题
         # 检查是否存在包含输入框的元素
         # 这里为了避免页面变化，故使用相对位置定位：作品标题父级右侧第一个元素的input子元素
+        if len(self.title) < 5:
+            self.title = "【中配】破浪"  # 标题小于5个字符
         await asyncio.sleep(1)
         xigua_logger.info(f'  [-] 正在填充标题和话题...')
         # 使用更具体的选择器或选择特定的元素
@@ -203,7 +205,7 @@ class XiGuaVideo(object):
         # 或者点击红色“确定”按钮
         red_confirm_button = page.locator('button.m-button.red:has-text("确定")')
         await red_confirm_button.click()
-        await page.wait_for_timeout(1000)  # 等待 1000 毫秒以确保输入稳定
+        await page.wait_for_timeout(2000)  # 等待 2秒以确保输入稳定
         xigua_logger.success("  [-] 封面上传成功！")
 
         # 定位包含“原创”文本的 label 元素
