@@ -246,7 +246,7 @@ class XiGuaVideo(object):
                 publish_button = page.get_by_role('button', name="发布", exact=True)
                 if await publish_button.count():
                     await publish_button.click()
-                await page.wait_for_url("https://studio.ixigua.com/content",
+                await page.wait_for_url("https://studio.ixigua.com/content?tab=video&investigation_param=cover_edited",
                                         timeout=1500)  # 如果自动跳转到作品页面，则代表发布成功
                 xigua_logger.success("  [-]视频发布成功")
                 break
