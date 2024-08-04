@@ -20,9 +20,10 @@ def is_landscape(info_path):
             info = json.load(f)
             width = info.get('width')
             height = info.get('height')
-            # 检查宽高是否存在且宽度大于高度
-            if width and height:
-                return width > height
+            duration = info.get('duration')
+            # 检查宽高是否存在且宽度大于高度，且视频时长大于等于 60 秒
+            if width and height and duration:
+                return width > height and duration >= 60
     except (FileNotFoundError, json.JSONDecodeError):
         return False  # 如果文件不存在或解析错误，则视为不是横版
     return False
