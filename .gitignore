@@ -168,5 +168,5 @@ douyin_uploader/*.json
 bilibili_uploader/*.json
 tk_uploader/*.json
 cookies
-xigua_uploader/account.json
+xigua_uploader/account*.json
 xhs_uploader/accounts.ini
