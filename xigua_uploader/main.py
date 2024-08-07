@@ -10,6 +10,8 @@ from utils.base_social_media import set_init_script
 from utils.log import xigua_logger
 from utils.videos_util import extract_cover_from_video
 
+import re
+
 
 async def cookie_auth(account_file):
     async with async_playwright() as playwright:
@@ -246,7 +248,7 @@ class XiGuaVideo(object):
                 publish_button = page.get_by_role('button', name="发布", exact=True)
                 if await publish_button.count():
                     await publish_button.click()
-                await page.wait_for_url("https://studio.ixigua.com/content?tab=video&investigation_param=cover_edited",
+                await page.wait_for_url(re.compile(r"https://studio\.ixigua\.com/content.*"),
                                         timeout=1500)  # 如果自动跳转到作品页面，则代表发布成功
                 xigua_logger.success("  [-]视频发布成功")
                 break
