@@ -46,7 +46,7 @@ def upload(folder, account_file):
     title = f'【中配】{summary["title"]}【{title_English}】'
 
     # 去除空格并获取前5个标签
-    tags = [tag.replace(" ", "") for tag in tags][:5]
+    tags = [tag[:20].replace(" ", "") for tag in tags][:5]
 
     # 打印视频文件名、标题和 hashtag
     print(f"视频文件名：{video_path}")

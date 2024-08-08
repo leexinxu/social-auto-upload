@@ -78,8 +78,8 @@ def upload(folder, account_file):
     if len(title) < 5:
         title = "【中配】破浪"
 
-    # 去除空格并获取前10个标签
-    tags = [tag.replace(" ", "") for tag in tags][:10]
+    # 去除空格并获取前10个标签, 且每个标签长度不超过20
+    tags = [tag[:20].replace(" ", "") for tag in tags][:10]
 
     # 打印视频文件名、标题和 hashtag
     print(f"视频文件名：{video_path}")
