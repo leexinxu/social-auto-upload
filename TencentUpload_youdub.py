@@ -53,7 +53,7 @@ def upload(folder, account_file):
     print(f"标题：{title}")
     print(f"标签：{tags}")
     category = TencentZoneTypes.TECHNOLOGY.value  # 标记原创需要否则不需要传
-    app = TencentVideo(title, video_path, tags, 0, account_file, category=None)
+    app = TencentVideo(title, video_path, tags, 0, account_file, category=category)
     asyncio.run(app.main(), debug=False)
 
     with open(os.path.join(folder, 'shipinhao.json'), 'w', encoding='utf-8') as f:
