@@ -230,16 +230,29 @@ class XiGuaVideo(object):
             # 输入新的内容
             await editor.type(self.summary[:400])
 
-        # 定位“添加至合集”按钮并点击
-        add_to_collection_button = page.locator('div.add-button:has-text("添加至合集")')
-        if await add_to_collection_button.count() > 0:
-            await add_to_collection_button.click()
-            # 定位并点击“中文配音”项
-            series_item = page.locator('div.m-item-title:has-text("【中文配音】")')
-            await series_item.click()
-            # 定位并点击确认按钮
-            confirm_button = page.locator('button:has-text("确认")')  # 根据实际按钮文本或其他属性调整选择器
-            await confirm_button.click()
+            # 定位“添加至合集”按钮并点击
+            add_to_collection_button = page.locator('div.add-button:has-text("添加至合集")')
+            if await add_to_collection_button.count() > 0:
+                await add_to_collection_button.click()
+                # 定位“中文配音”项
+                series_item = page.locator('li.m-series-item:has-text("【中文配音】")')
+                # 从 series_item 内部找到 input 元素
+                input_element = series_item.locator('input[type="radio"]')
+                # 检查 input 元素是否被禁用
+                is_disabled = await input_element.is_disabled()
+                if is_disabled:
+                    # 定位 <footer> 元素
+                    footer_element = page.locator('footer.m-add-to-series-modal-footer')
+                    # 在 <footer> 内部定位带有“取消”文本的按钮
+                    cancel_button = footer_element.locator('button:has-text("取消")')
+                    # 点击“取消”按钮
+                    await cancel_button.click()
+                else:
+                    # 点击“中文配音”项
+                    await series_item.click()
+                    # 定位并点击确认按钮
+                    confirm_button = page.locator('button:has-text("确认")')
+                    await confirm_button.click()
 
         # 判断视频是否发布成功
         while True:
