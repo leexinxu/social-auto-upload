@@ -11,13 +11,18 @@ from utils.files_times import get_absolute_path
 from utils.log import tencent_logger
 
 
+import re
+
 def format_str_for_short_title(origin_title: str) -> str:
     # 定义允许的特殊字符
     allowed_special_chars = "《》“”:+?%°"
 
-    # 移除不允许的特殊字符
-    filtered_chars = [char if char.isalnum() or char in allowed_special_chars else ' ' if char == ',' else '' for
-                      char in origin_title]
+    # 使用正则表达式保留中英文字符和允许的特殊字符，移除其他字符
+    filtered_chars = [
+        char if re.match(r'[\u4e00-\u9fffA-Za-z0-9]', char) or char in allowed_special_chars 
+        else ' ' if char == ',' else '' 
+        for char in origin_title
+    ]
     formatted_string = ''.join(filtered_chars)
 
     # 调整字符串长度
@@ -29,6 +34,7 @@ def format_str_for_short_title(origin_title: str) -> str:
         formatted_string += ' ' * (6 - len(formatted_string))
 
     return formatted_string
+
 
 
 async def cookie_auth(account_file):
