@@ -42,6 +42,7 @@ def find_videos(folder):
 # %%
 # 上传视频到抖音
 def upload(folder, account_file):
+    log(f"使用 {account_file=}")
     log(f"上传视频到抖音 {folder=}")
 
     video_path = os.path.join(folder, 'video.mp4')
@@ -83,19 +84,26 @@ def upload(folder, account_file):
 
 # %%
 # 每分钟检查一下是否有需要上传的视频，如果有，则上传
-def check_up(src_dir, account_file):
+def check_up(src_dir, account_files):
     log(f"******* 启动上传到抖音脚本, 检查视频目录: {src_dir} *******")
+    account_index = 0
+
     while True:
         log("检查是否有视频需要上传到抖音...")
         up_dir_list = find_videos(src_dir)
         log(f"找到需要上传抖音: {len(up_dir_list)}")
+
         for up_dir in up_dir_list:
+            # 轮询选择账号文件
+            account_file = account_files[account_index]
+            account_index = (account_index + 1) % len(account_files)
+
             # 上传视频到抖音
             upload(up_dir, account_file)
 
             # 防止提交过快
-            log("防止提交过快，等待1分钟上传下一个。。。")
-            time.sleep(60)
+            #log("防止提交过快，等待1分钟上传下一个。。。")
+            #time.sleep(60)
 
         log("等待10分钟再检查。。。")
         time.sleep(60*10)
@@ -103,8 +111,10 @@ def check_up(src_dir, account_file):
 # %%
 # 启动自动上传
 BASE_DIR = Path(__file__).parent.resolve()
-account_file = Path(BASE_DIR / "douyin_uploader" / "account2.json")
+account_files = [Path(BASE_DIR / "douyin_uploader" / "account_polang.json"), 
+                 Path(BASE_DIR / "douyin_uploader" / "account_changfeng.json")]
 src_dir = '/Volumes/Data/AI/YouDub-webui/videos_20240808'
-check_up(src_dir, account_file)
+check_up(src_dir, account_files)
+
 
 

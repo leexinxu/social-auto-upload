@@ -41,6 +41,7 @@ def find_videos(folder):
 # %%
 # 上传视频到西瓜
 def upload(folder, account_file):
+    log(f"使用 {account_file=}")
     log(f"上传视频到西瓜 {folder=}")
 
     # 检查cookie
@@ -96,19 +97,36 @@ def upload(folder, account_file):
 
 # %%
 # 每分钟检查一下是否有需要上传的视频，如果有，则上传
-def check_up(src_dir, account_file):
+def check_up(src_dir, account_files):
     log(f"******* 启动上传到西瓜脚本, 检查视频目录: {src_dir} *******")
+    account_index = 0
+
     while True:
         log("检查是否有视频需要上传到西瓜...")
         up_dir_list = find_videos(src_dir)
         log(f"找到需要上传西瓜: {len(up_dir_list)}")
-        for up_dir in up_dir_list:
-            # 上传视频到西瓜
-            upload(up_dir, account_file)
 
-            # 防止提交过快
-            log("防止提交过快，等待1分钟上传下一个。。。")
-            time.sleep(60)
+        for up_dir in up_dir_list:
+            success = False
+            retry_count = 0
+
+            while not success and retry_count < len(account_files):
+                # 轮询选择账号文件
+                account_file = account_files[account_index]
+
+                try:
+                    # 上传视频到西瓜
+                    upload(up_dir, account_file)
+                    success = True  # 上传成功
+                except Exception as e:
+                    log(f"账号 {account_file} 上传失败：{e}")
+
+                # 切换到下一个账号文件
+                account_index = (account_index + 1) % len(account_files)
+                retry_count += 1
+
+            if not success:
+                log(f"视频 {up_dir} 上传失败，所有账号均尝试过。")
 
         log("等待10分钟再检查。。。")
         time.sleep(60*10)
@@ -116,8 +134,10 @@ def check_up(src_dir, account_file):
 # %%
 # 启动自动上传
 BASE_DIR = Path(__file__).parent.resolve()
-account_file = Path(BASE_DIR / "xigua_uploader" / "account2.json")
+account_files = [Path(BASE_DIR / "xigua_uploader" / "account_polang.json"), 
+                 Path(BASE_DIR / "xigua_uploader" / "account_changfeng.json")]
 src_dir = '/Volumes/Data/AI/YouDub-webui/videos_20240808'
-check_up(src_dir, account_file)
+check_up(src_dir, account_files)
+
 
 

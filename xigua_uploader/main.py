@@ -256,6 +256,10 @@ class XiGuaVideo(object):
 
         # 判断视频是否发布成功
         while True:
+            # 检查是否出现“发文频繁”的提示
+            rate_limit_message = await page.get_by_text("发文频繁").count()
+            if rate_limit_message > 0:
+                raise Exception("发文频繁")
             # 判断视频是否发布成功
             try:
                 publish_button = page.get_by_role('button', name="发布", exact=True)
