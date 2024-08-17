@@ -170,3 +170,4 @@ tk_uploader/*.json
 cookies
 xigua_uploader/account*.json
 xhs_uploader/accounts.ini
+.DS_Store

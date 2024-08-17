@@ -94,16 +94,26 @@ def check_up(src_dir, account_files):
         log(f"找到需要上传抖音: {len(up_dir_list)}")
 
         for up_dir in up_dir_list:
-            # 轮询选择账号文件
-            account_file = account_files[account_index]
-            account_index = (account_index + 1) % len(account_files)
+            success = False
+            retry_count = 0
 
-            # 上传视频到抖音
-            upload(up_dir, account_file)
+            while not success and retry_count < len(account_files):
+                # 轮询选择账号文件
+                account_file = account_files[account_index]
 
-            # 防止提交过快
-            #log("防止提交过快，等待1分钟上传下一个。。。")
-            #time.sleep(60)
+                try:
+                    # 上传视频到西瓜
+                    upload(up_dir, account_file)
+                    success = True  # 上传成功
+                except Exception as e:
+                    log(f"账号 {account_file} 上传失败：{e}")
+
+                # 切换到下一个账号文件
+                account_index = (account_index + 1) % len(account_files)
+                retry_count += 1
+
+            if not success:
+                log(f"视频 {up_dir} 上传失败，所有账号均尝试过。")
 
         log("等待10分钟再检查。。。")
         time.sleep(60*10)
