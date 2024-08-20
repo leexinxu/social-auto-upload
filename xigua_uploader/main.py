@@ -272,7 +272,7 @@ class XiGuaVideo(object):
                     await publish_button.click()
                 
                 await page.wait_for_url(re.compile(r"https://studio\.ixigua\.com/content.*"),
-                                        timeout=1500)  # 如果自动跳转到作品页面，则代表发布成功
+                                        timeout=3000)  # 如果自动跳转到作品页面，则代表发布成功
                 xigua_logger.success("  [-]视频发布成功")
                 break
             except:
