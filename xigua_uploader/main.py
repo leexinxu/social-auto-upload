@@ -254,25 +254,36 @@ class XiGuaVideo(object):
                     confirm_button = page.locator('button:has-text("确认")')
                     await confirm_button.click()
 
+
         # 判断视频是否发布成功
+        max_attempts = 10  # 最大尝试次数
+        attempts = 0  # 当前尝试次数
+
         while True:
             # 检查是否出现“发文频繁”的提示
             rate_limit_message = await page.get_by_text("发文频繁").count()
             if rate_limit_message > 0:
                 raise Exception("发文频繁")
+
             # 判断视频是否发布成功
             try:
                 publish_button = page.get_by_role('button', name="发布", exact=True)
                 if await publish_button.count():
                     await publish_button.click()
+                
                 await page.wait_for_url(re.compile(r"https://studio\.ixigua\.com/content.*"),
                                         timeout=1500)  # 如果自动跳转到作品页面，则代表发布成功
                 xigua_logger.success("  [-]视频发布成功")
                 break
             except:
-                xigua_logger.info("  [-] 视频正在发布中...")
+                attempts += 1
+                if attempts >= max_attempts:
+                    raise Exception("发布视频尝试次数过多，可能存在问题")
+                
+                xigua_logger.info(f"  [-] 视频正在发布中... 尝试次数: {attempts}/{max_attempts}")
                 await page.screenshot(full_page=True)
                 await asyncio.sleep(0.5)
+
 
         await context.storage_state(path=self.account_file)  # 保存cookie
         xigua_logger.success('  [-]cookie更新完毕！')
