@@ -53,7 +53,7 @@ def upload(folder, account_file):
     print(f"标题：{title}")
     print(f"标签：{tags}")
     category = TencentZoneTypes.TECHNOLOGY.value  # 标记原创需要否则不需要传
-    app = TencentVideo(title, video_path, tags, 0, account_file, category=None)
+    app = TencentVideo(title, video_path, tags, 0, account_file, category=category)
     asyncio.run(app.main(), debug=False)
 
     with open(os.path.join(folder, 'shipinhao.json'), 'w', encoding='utf-8') as f:
@@ -84,7 +84,7 @@ def check_up(src_dir, account_file):
 # 启动自动上传
 BASE_DIR = Path(__file__).parent.resolve()
 account_file = Path(BASE_DIR / "tencent_uploader" / "account.json")
-src_dir = '/Volumes/Data/AI/YouDub-webui/videos_20240808'
+src_dir = '/Volumes/Data/AI/YouDub-webui/videos_20240821'
 check_up(src_dir, account_file)
 
 

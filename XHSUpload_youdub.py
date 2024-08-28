@@ -111,7 +111,7 @@ def check_up(src_dir):
 
 # %%
 # 启动自动上传
-src_dir = '/Volumes/Data/AI/YouDub-webui/videos_20240808'
+src_dir = '/Volumes/Data/AI/YouDub-webui/videos_20240821'
 check_up(src_dir)
 
 
