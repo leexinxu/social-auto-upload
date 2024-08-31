@@ -136,7 +136,7 @@ def check_up(src_dir, account_files):
 BASE_DIR = Path(__file__).parent.resolve()
 account_files = [Path(BASE_DIR / "xigua_uploader" / "account_polang.json"), 
                  Path(BASE_DIR / "xigua_uploader" / "account_changfeng.json")]
-src_dir = '/Volumes/Data/AI/YouDub-webui/videos_20240821'
+src_dir = '/Volumes/Data/AI/YouDub-webui/videos'
 check_up(src_dir, account_files)
 
 
