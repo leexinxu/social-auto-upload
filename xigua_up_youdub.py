@@ -116,7 +116,7 @@ def check_up(src_dir, account_file):
 # %%
 # 启动自动上传
 BASE_DIR = Path(__file__).parent.resolve()
-account_file = Path(BASE_DIR / "xigua_uploader" / "account.json")
+account_file = Path(BASE_DIR / "xigua_uploader" / "account_polang.json")
 src_dir = '/Volumes/Data/AI/YouDub-webui/videos_20240821'
 check_up(src_dir, account_file)
 

@@ -23,7 +23,7 @@ def is_landscape(info_path):
             duration = info.get('duration')
             # 检查宽高是否存在且宽度大于高度，且视频时长大于等于 60 秒
             if width and height and duration:
-                return width > height and duration >= 60
+                return width > height and duration >= 60 * 3
     except (FileNotFoundError, json.JSONDecodeError):
         return False  # 如果文件不存在或解析错误，则视为不是横版
     return False
@@ -103,7 +103,7 @@ def check_up(src_dir, account_file):
 # %%
 # 启动自动上传
 BASE_DIR = Path(__file__).parent.resolve()
-account_file = Path(BASE_DIR / "douyin_uploader" / "account_polang.json")
+account_file = Path(BASE_DIR / "douyin_uploader" / "account_changfeng.json")
 src_dir = '/Volumes/Data/AI/YouDub-webui/videos_20240821'
 check_up(src_dir, account_file)
 
