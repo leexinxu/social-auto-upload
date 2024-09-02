@@ -105,7 +105,7 @@ class DouYinVideo(object):
         douyin_logger.info(f'[-] 正在打开主页...')
         await page.wait_for_url("https://creator.douyin.com/creator-micro/content/upload")
         # 点击 "上传视频" 按钮
-        await page.locator(".upload-btn-PdfuUv").set_input_files(self.file_path)
+        await page.locator("div[class^='container'] input").set_input_files(self.file_path)
 
         # 等待页面跳转到指定的 URL
         while True:
@@ -180,6 +180,17 @@ class DouYinVideo(object):
             # 检测是否是已选中状态
             if 'semi-switch-checked' not in await page.eval_on_selector(third_part_element, 'div => div.className'):
                 await page.locator(third_part_element).locator('input.semi-switch-native-control').click()
+        
+
+        # 查找同步到头条按钮
+        checkbox_sync_toutiao = page.locator('input[type="checkbox"].radio-native-p6VBGt[value="true"]')
+        # 找到选中
+        if await checkbox_sync_toutiao.count() > 0 and not await checkbox_sync_toutiao.is_checked():
+            await checkbox_sync_toutiao.check()
+            print("选中同步到头条")
+        else:
+            print("没有找到同步到头条" if await checkbox_sync_toutiao.count() < 1 else "已经选中同步到头条")
+
 
         if self.publish_date != 0:
             await self.set_schedule_time_douyin(page, self.publish_date)
