@@ -32,11 +32,8 @@ def is_landscape(info_path):
 def find_videos(folder):
     dir_list = []
     for dir, _, files in os.walk(folder):
-        if 'ok.json' in files and 'video.mp4' in files and 'douyin.json' not in files and 'download.info.json' in files:
-            info_path = os.path.join(dir, 'download.info.json')
-            if not is_landscape(info_path):  # 使用 JSON 文件检查是否为横版
-                # 只上传非横版，竖版，横版西瓜视频传
-                dir_list.append(dir)
+        if 'ok.json' in files and 'video.mp4' in files and 'douyin.json' not in files:
+            dir_list.append(dir)
     return dir_list
 
 # %%
