@@ -170,8 +170,18 @@ class DouYinVideo(object):
         # await page.wait_for_timeout(1000)
         # await page.locator('div[role="listbox"] [role="option"]').first.click()
 
-        await page.locator('div.semi-select span:has-text("请选择合集")').click()
-        await page.locator('div[role="listbox"] [role="option"]').nth(2).click()
+        try:
+            await page.locator('div.semi-select span:has-text("请选择合集")').click()
+            # 等待 "中文配音" 选项出现
+            await page.wait_for_selector('span.option-title-WKxxu3:has-text("中文配音")', timeout=5000)
+            # 选择中文配音合集
+            if await page.locator('span.option-title-WKxxu3:has-text("中文配音")').count() > 0:
+                await page.locator('span.option-title-WKxxu3:has-text("中文配音")').click()
+            else:
+                print("中文配音选项不存在")
+        except:
+            print("中文配音选项不存在或加载超时")
+
 
         # 頭條/西瓜
         third_part_element = '[class^="info"] > [class^="first-part"] div div.semi-switch'
