@@ -118,8 +118,8 @@ def check_up(src_dir, account_files):
 # %%
 # 启动自动上传
 BASE_DIR = Path(__file__).parent.resolve()
-account_files = [Path(BASE_DIR / "douyin_uploader" / "account_polang.json"), 
-                 Path(BASE_DIR / "douyin_uploader" / "account_changfeng.json")]
+account_files = [Path(BASE_DIR / "douyin_uploader" / "account_changfeng.json"), 
+                 Path(BASE_DIR / "douyin_uploader" / "account_polang.json")]
 src_dir = '/Volumes/Data/AI/YouDub-webui/videos'
 check_up(src_dir, account_files)
 
