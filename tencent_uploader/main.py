@@ -95,7 +95,7 @@ class TencentVideo(object):
         self.publish_date = publish_date
         self.account_file = account_file
         self.category = category
-        self.local_executable_path = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+        self.local_executable_path = LOCAL_CHROME_PATH
 
     async def set_schedule_time_tencent(self, page, publish_date):
         label_element = page.locator("label").filter(has_text="定时").nth(1)
