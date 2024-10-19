@@ -60,8 +60,14 @@ def upload(folder, account_file):
     title_English = data['title']
     webpage_url = data['webpage_url']
     description = f'{summary["summary"]}\n\n{summary["author"]}\n\n{webpage_url}'
-
-    title = f'【中配】{summary["title"]}【{title_English}】'
+    
+    # 获取视频分类
+    category = folder.split('/')[6]  # 根据路径结构提取
+    keywords = ['中配男', '多角色', '原音色克隆']
+    if any(keyword in category for keyword in keywords):
+        category = '中配'
+    
+    title = f'【{category}】{summary["title"]}【{title_English}】'
 
     title = f'{title}\n\n {description}'
 
