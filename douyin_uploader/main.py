@@ -12,13 +12,14 @@ from utils.log import douyin_logger
 
 async def cookie_auth(account_file):
     async with async_playwright() as playwright:
-        browser = await playwright.chromium.launch(headless=True)
+        browser = await playwright.chromium.launch(headless=False,executable_path=LOCAL_CHROME_PATH)
         context = await browser.new_context(storage_state=account_file)
         context = await set_init_script(context)
         # 创建一个新的页面
         page = await context.new_page()
         # 访问指定的 URL
         await page.goto("https://creator.douyin.com/creator-micro/content/upload")
+        await asyncio.sleep(5)
         # 2024.06.17 抖音创作者中心改版
         if await page.get_by_text('手机号登录').count():
             print("[+] 等待5秒 cookie 失效")
@@ -52,7 +53,8 @@ async def douyin_cookie_gen(account_file):
         # Pause the page, and start recording manually.
         page = await context.new_page()
         await page.goto("https://creator.douyin.com/")
-        await page.pause()
+        #await page.pause()
+        await asyncio.sleep(40)
         # 点击调试器的继续，保存cookie
         await context.storage_state(path=account_file)
 
