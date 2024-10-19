@@ -41,7 +41,8 @@ async def douyin_setup(account_file, handle=False):
 async def douyin_cookie_gen(account_file):
     async with async_playwright() as playwright:
         options = {
-            'headless': False
+            'headless': False,
+            'executable_path': LOCAL_CHROME_PATH
         }
         # Make sure to run headed.
         browser = await playwright.chromium.launch(**options)
