@@ -105,7 +105,7 @@ def check_up(src_dir, account_files):
                 account_file = account_files[account_index]
 
                 try:
-                    # 上传视频到西瓜
+                    # 上传视频到抖音
                     upload(up_dir, account_file)
                     success = True  # 上传成功
                 except Exception as e:
@@ -124,8 +124,8 @@ def check_up(src_dir, account_files):
 # %%
 # 启动自动上传
 BASE_DIR = Path(__file__).parent.resolve()
-account_files = [Path(BASE_DIR / "douyin_uploader" / "account_changfeng.json"), 
-                 Path(BASE_DIR / "douyin_uploader" / "account_polang.json")]
+account_files = [Path(BASE_DIR / "douyin_uploader" / "account_polang.json"), 
+                 Path(BASE_DIR / "douyin_uploader" / "account_changfeng.json")]
 src_dir = '/Volumes/Data/AI/YouDub-webui/videos'
 check_up(src_dir, account_files)
 
