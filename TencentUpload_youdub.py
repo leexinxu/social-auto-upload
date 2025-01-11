@@ -4,7 +4,7 @@ from datetime import datetime
 import time
 import asyncio
 from pathlib import Path
-from tencent_uploader.main import weixin_setup, TencentVideo
+from uploader.tencent_uploader.main import weixin_setup, TencentVideo
 from utils.constant import TencentZoneTypes
 import json
 

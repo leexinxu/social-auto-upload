@@ -4,7 +4,7 @@ from datetime import datetime
 import time
 import asyncio
 from pathlib import Path
-from douyin_uploader.main import douyin_setup, DouYinVideo
+from uploader.douyin_uploader.main import douyin_setup, DouYinVideo
 import json
 
 # %%
@@ -78,7 +78,7 @@ def upload(folder, account_file):
     print(f"视频文件名：{video_path}")
     print(f"标题：{title}")
     print(f"标签：{tags}")
-    app = DouYinVideo(title, video_path, tags, 0, account_file)
+    app = DouYinVideo(title, video_path, tags, 0, account_file, cover_path)
     asyncio.run(app.main(), debug=False)
 
     with open(os.path.join(folder, 'douyin.json'), 'w', encoding='utf-8') as f:
@@ -124,7 +124,7 @@ def check_up(src_dir, account_files):
 # %%
 # 启动自动上传
 BASE_DIR = Path(__file__).parent.resolve()
-account_files = [Path(BASE_DIR / "douyin_uploader" / "account_polang.json"), 
+account_files = [
                  Path(BASE_DIR / "douyin_uploader" / "account_changfeng.json")]
 src_dir = '/Volumes/Data/AI/YouDub-webui/videos'
 check_up(src_dir, account_files)

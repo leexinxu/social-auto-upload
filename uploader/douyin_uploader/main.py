@@ -267,13 +267,15 @@ class DouYinVideo(object):
             await page.click('text="设置竖封面"')
             await page.wait_for_timeout(2000)  # 等待2秒
             # 定位到上传区域并点击
-            await page.locator("div[class^='semi-upload upload'] >> input.semi-upload-hidden-input").set_input_files(thumbnail_path)
-            await page.wait_for_timeout(2000)  # 等待2秒
-            await page.locator("div[class^='extractFooter'] button:visible:has-text('完成')").click()
+            # await page.locator("div[class^='semi-upload upload'] >> input.semi-upload-hidden-input").set_input_files(thumbnail_path)
+            # await page.wait_for_timeout(2000)  # 等待2秒
+            # await page.locator("div[class^='semi-button-content'] button:visible:has-text('完成')").click()
             # finish_confirm_element = page.locator("div[class^='confirmBtn'] >> div:has-text('完成')")
             # if await finish_confirm_element.count():
             #     await finish_confirm_element.click()
             # await page.locator("div[class^='footer'] button:has-text('完成')").click()
+            # 定位并点击“完成”按钮
+            await page.locator('button.semi-button.semi-button-primary.semi-button-light.primary-RstHX_:has-text("完成")').click()
 
     async def set_location(self, page: Page, location: str = "杭州市"):
         # todo supoort location later
