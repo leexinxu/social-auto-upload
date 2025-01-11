@@ -11,7 +11,8 @@ social-auto-upload This project aims to automate the posting of videos to variou
   - [x] 视频号
   - [x] bilibili
   - [x] 小红书
-  - [ ] 快手
+  - [x] 快手
+  - [ ] 百家号
 
 - 部分国外社交媒体：
   - [x] tiktok
@@ -67,7 +68,7 @@ meta_file 内容(content)：
 ```
 
 ### Usage
-1. 设置conf 文件中的 `LOCAL_CHROME_PATH`(在douyin 或者视频号可能出现chromium 不兼容的各种问题，建议设置本地的chrome)
+1. 设置conf 文件中的 `LOCAL_CHROME_PATH`(在douyin、视频号 tiktok可能出现chromium 不兼容的各种问题，建议设置本地的chrome)
 2. 这里分割出来3条路
    - 可自行研究源码，免费、任意 穿插在自己的项目中
    - 可参考下面的各个平台的使用指南，`examples`文件夹中有各种示例代码
@@ -87,7 +88,7 @@ usage: cli_main.py [-h] platform account_name action ...
 Upload video to multiple social-media.
 
 positional arguments:
-  platform      Choose social-media platform: douyin tencent tiktok
+  platform      Choose social-media platform: douyin tencent tiktok kuaishou
   account_name  Account name for the platform: xiaoA
   action        Choose action
     upload      upload operation
@@ -141,7 +142,7 @@ generate_schedule_time_next_day 默认从第二天开始（此举为避免选择
 > 解决方案：
 > 1. 下载chrome
 > 2. 找到chrome的安装目录
-> 3. 将目录配置到DouYinVideo类中  self.local_executable_path = "xxx/xxx/chrome.exe"
+> 3. 将本地chrome 路径conf文件中 LOCAL_CHROME_PATH = "xxx/xxx/chrome.exe"
 
 
 参考项目：
@@ -168,7 +169,7 @@ generate_schedule_time_next_day 默认从第二天开始（此举为避免选择
 > 解决方案：
 > 1. 下载chrome
 > 2. 找到chrome的安装目录
-> 3. 将目录配置到TencentVideo类中  self.local_executable_path = "xxx/xxx/chrome.exe"
+> 3. 将本地chrome 路径conf文件中 LOCAL_CHROME_PATH = "xxx/xxx/chrome.exe"
 
 ---
 
@@ -182,7 +183,7 @@ generate_schedule_time_next_day 默认从第二天开始（此举为避免选择
 ![Alt text](media/20231009111131.png)
 - 导出
 ![Alt text](media/20231009111214.png)
-3. 黏贴至 accounts.ini文件中
+3. 黏贴至 uploader/xhs_uploader/accounts.ini文件中
 
 
 #### 解释与注意事项：
@@ -234,11 +235,16 @@ bilibili cookie 长期有效（至少我运行2年以来是这样的）
 ### 5. tiktok 
 使用playwright模拟浏览器行为(Simulating Browser Behavior with playwright)
 1. 准备视频目录结构(Prepare the video directory structure)
-2. cookie获取(generate your cookie)：get_tk_cookie.py 
+2. 将本地chrome路径配置到conf文件中  LOCAL_CHROME_PATH = "xxx/xxx/chrome.exe"(Configure the local chrome path to the conf file)
+3. cookie获取(generate your cookie)：get_tk_cookie.py 
 ![get tiktok cookie](media/tk_login.png) 
-3. 上传视频(upload video)：upload_video_to_tiktok.py
+4. 上传视频(upload video)：upload_video_to_tiktok.py
 
-
+24.7.3 update local chrome support:
+- you can upload your custom thumbnail(place `png` file at the path of `videos`)
+- if not, the system will take the first frame of the video as the thumbnail.
+- chrome drive can't login by gmail oauth. the google don't support it. (if you want login by google oauth you can use the `tk_uploader/main.py` old firefox.)
+- before the upload process change the language to eng.
 
 其他部分解释：
 ```
