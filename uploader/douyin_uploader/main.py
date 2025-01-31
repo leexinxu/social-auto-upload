@@ -200,7 +200,7 @@ class DouYinVideo(object):
             "整活": "整活配音",
         }
         category = self.title[1:self.title.index("】")]
-        collection = category_collection[category]
+        collection = category_collection.get(category, category)
         try:
             await page.locator('div.semi-select span:has-text("请选择合集")').click()
             # 等待合集选项出现
