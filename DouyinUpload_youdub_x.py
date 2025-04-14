@@ -78,7 +78,7 @@ def upload(folder, account_file):
     print(f"视频文件名：{video_path}")
     print(f"标题：{title}")
     print(f"标签：{tags}")
-    app = DouYinVideo(title, video_path, tags, 0, account_file, cover_path)
+    app = DouYinVideo(title, video_path, tags, 0, account_file, None)
     asyncio.run(app.main(), debug=False)
 
     with open(os.path.join(folder, 'douyin.json'), 'w', encoding='utf-8') as f:
